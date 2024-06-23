@@ -1,0 +1,11 @@
+disableScroll:
+load: file="./map.txt"
+
+hook: name="receiver", func="receive", updated="true"
+
+background: color=white
+text:x=20,y=8,text="ID:", color="black"
+textbox: name="id",x=20,y=9,width=10,height=1,color=black,background=lightGray,text=""
+
+button: x=21, y=14, name="start", useTemplate=true, sprite="lightGray",hoverSprite="gray",width=8,height=2, text="Continue", color=black, background=lightGray, hoverColor=white, hoverBackground=gray
+when: name="start", command="call: name=triggers, func=login"

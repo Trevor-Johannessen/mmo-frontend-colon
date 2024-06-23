@@ -1,0 +1,11 @@
+You can't use ../ when using requires???
+api: path="websites/mmo/api/triggers", name=triggers
+api: path="websites/mmo/api/receiver", name=receiver
+load: file="./login.txt"
+
+disableScroll:
+background: color=white
+
+sprite: x=13, y=3, src="./resources/mmo_title.pgi"
+button: x=22, y=14, name="start", useTemplate=true, sprite="lightGray",hoverSprite="gray",width=7,height=2, text="Start", color=black, background=lightGray, hoverColor=white, hoverBackground=gray
+when: name=start, command="jumpcut: to=login.txt, from=title.txt"

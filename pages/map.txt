@@ -1,0 +1,9 @@
+disableScroll:
+background: color=white
+color: color=black
+
+hook: name="triggers", func="inputHandler", updated="true"
+hook: name="receiver", func="receive", updated="true"
+
+text: x=1, y=1, text="Map:"
+text: x=1, y=2, height=8, width=32, name=field
