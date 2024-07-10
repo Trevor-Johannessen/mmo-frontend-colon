@@ -51,6 +51,10 @@ function move(x, y)
     return packet(5, #bitstr, bitstr)
 end
 
+function inspectPlayerPacket(id)
+    return packet(8, #id, id)
+end
+
 function ntoh(str)
     local value = 0
     for i=0,3,1 do

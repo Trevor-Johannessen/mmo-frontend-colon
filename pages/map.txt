@@ -7,3 +7,11 @@ hook: name="receiver", func="receive", updated="true"
 
 text: x=1, y=1, text="Map:"
 text: x=1, y=2, height=8, width=32, name=field
+
+--- SIDEBAR ---
+rectangle: x=34, y=2, hollow=true, character=*, characterColor=black, color=white, width=17, height=18
+text: x=35,y=3,text="",width=15,height=16,name=sidebar
+
+--- DIALOGUE ---
+rectangle: x=1, y=10, hollow=true, character=*, characterColor=black, color=white, width=32, height=10
+text: x=2,y=11,width=30,height=8,name=dialogue

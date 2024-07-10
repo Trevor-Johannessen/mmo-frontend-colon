@@ -12,6 +12,7 @@ function connect(id)
     if not res or res.getResponseCode() ~= 200 then
         error("Error: Authentication failed.")
     end
+    colon.log("Setting id to " .. id)
     _G['player_id'] = id
     token = string.sub(res.readAll(), 2, -2)
     _G['ws'] = http.websocket(globals['base_url'])
@@ -25,7 +26,12 @@ function login(token, setMapPage)
     _G['ws'].send(p, true)
 end
 
+function sendPacket(p)
+    _G['ws'].send(p, true)
+end
+
 return{
     connect=connect,
     login=login,
+    sendPacket=sendPacket,
 }
