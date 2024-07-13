@@ -12,6 +12,7 @@ local opcodes = {
     MOVE=6,
     INSPECT_PLAYER=8,
     MAP=9,
+    LEAVE_MAP=10,
 }
 local players = {}
 
@@ -43,7 +44,7 @@ end
 
 function handlePacket(args)
     local packet = parsePacket(args['mouse_x']) -- I really need to change these arg names
-    colon.log("Packet> Id: " .. packet.id .. " Op: " .. packet.opcode .. " L: " .. packet.length .. " Data: " .. string.sub(packet.data, 1, packet.length))
+    --colon.log("Packet> Id: " .. packet.id .. " Op: " .. packet.opcode .. " L: " .. packet.length .. " Data: " .. string.sub(packet.data, 1, packet.length))
     if _G['unack_packets'][packet.id] then
         local func = _G['unack_packets'][packet.id][1]
         local args = _G['unack_packets'][packet.id][2]
@@ -57,6 +58,8 @@ function handlePacket(args)
         setSidebar(packet)
     elseif packet.opcode == opcodes.MAP then
         loadMap(packet)
+    elseif packet.opcode == opcodes.LEAVE_MAP then
+        removePlayerFromMap(packet)
     end
 end
 
@@ -65,8 +68,7 @@ function handleMove(p)
     local y = packet.ntoh(string.sub(p.data, 5, 8))
     local id = string.sub(p.data, 9)
     local player_obj
-    colon.log("Handling move: X="..x..", Y="..y..", id="..id..", L="..#id)
-    if not players[id] then colon.log("Adding new player") end
+    --colon.log("Handling move: X="..x..", Y="..y..", id="..id..", L="..#id)
     if players[id] then
         players[id].x = x+1
         players[id].y = y+2
@@ -76,6 +78,7 @@ function handleMove(p)
         players[id] = colon.getObjectTypes().button.create{name="button_"..id,x=x+1,y=y+2,width=1,height=1,useTemplate="true",sprite="white",background="white", hoverBackground="white", hoverSprite="white",text=icon_text}
         colon.addObject{page="map.txt", object=players[id]}
         colon.addWhen{page="map.txt", name="button_"..id, trigger="call: name=triggers, func=inspectPlayer, id="..id}
+        colon.log("Registered player " .. id .. ".")
     end
     colon.redraw()
 end
@@ -89,6 +92,13 @@ function setSidebar(p)
 
     -- set text
     sidebar:set("Name: "..name.."\\nPos: ("..x..", "..y..")")
+end
+
+function removePlayerFromMap(p)
+    if not players[p.data] then return end
+    colon.removeObject{page="map.txt", name=players[p.data].name}
+    players[p.data] = nil
+    colon.redraw()
 end
 
 function loadMap(p)
